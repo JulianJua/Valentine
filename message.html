@@ -371,6 +371,15 @@
         });
         
         yesButton.addEventListener('click', function() {
+            // Set the appropriate message based on whether No was clicked
+            if (noClickCount === 0) {
+                // First time Yes - show the romantic message
+                thankYouEl.textContent = "You won't regret it, I love you so much!";
+            } else {
+                // After clicking No - show the current message
+                thankYouEl.textContent = "I almost just killed myself, thanks for choosing me!";
+            }
+            
             // Fade out everything
             messageContainer.classList.add('fade-out');
             buttonsContainer.classList.add('fade-out');
