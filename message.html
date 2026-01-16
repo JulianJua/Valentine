@@ -14,6 +14,7 @@
         body {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: #ffffff;
@@ -25,7 +26,7 @@
             width: 100%;
             max-width: 800px;
             padding: 60px 20px;
-            margin: 0 auto;
+            text-align: center;
         }
         
         .message {
@@ -94,7 +95,7 @@
             width: 100%;
             max-width: 800px;
             padding: 0 20px;
-            margin: 0 auto;
+            text-align: center;
         }
         
         .thank-you.show {
@@ -221,14 +222,116 @@
         const thankYouEl = document.getElementById('thankYou');
         
         function getRandomPosition() {
-            const maxX = window.innerWidth - 150;
-            const maxY = window.innerHeight - 60;
-            const minX = 20;
-            const minY = 20;
+            const buttonWidth = 150;
+            const buttonHeight = 60;
+            const padding = 20;
+            
+            // Get all text areas to avoid
+            const textAreas = [];
+            
+            // Get the message container bounds
+            if (messageContainer.style.display !== 'none') {
+                const messageContainerRect = messageContainer.getBoundingClientRect();
+                textAreas.push({
+                    left: messageContainerRect.left - padding,
+                    right: messageContainerRect.right + padding,
+                    top: messageContainerRect.top - padding,
+                    bottom: messageContainerRect.bottom + padding
+                });
+            }
+            
+            // Get the thank you message bounds if visible
+            if (thankYouEl.classList.contains('show')) {
+                const thankYouRect = thankYouEl.getBoundingClientRect();
+                textAreas.push({
+                    left: thankYouRect.left - padding,
+                    right: thankYouRect.right + padding,
+                    top: thankYouRect.top - padding,
+                    bottom: thankYouRect.bottom + padding
+                });
+            }
+            
+            // If no text areas, use full screen
+            if (textAreas.length === 0) {
+                return {
+                    x: Math.random() * (window.innerWidth - buttonWidth - padding * 2) + padding,
+                    y: Math.random() * (window.innerHeight - buttonHeight - padding * 2) + padding
+                };
+            }
+            
+            // Combine all text areas into one bounding box
+            const combinedArea = textAreas.reduce((acc, area) => {
+                return {
+                    left: Math.min(acc.left, area.left),
+                    right: Math.max(acc.right, area.right),
+                    top: Math.min(acc.top, area.top),
+                    bottom: Math.max(acc.bottom, area.bottom)
+                };
+            }, textAreas[0]);
+            
+            // Define safe zones (areas outside the text)
+            const safeZones = [];
+            
+            // Top zone (above text)
+            if (combinedArea.top > padding) {
+                safeZones.push({
+                    minX: padding,
+                    maxX: window.innerWidth - buttonWidth - padding,
+                    minY: padding,
+                    maxY: combinedArea.top - buttonHeight
+                });
+            }
+            
+            // Bottom zone (below text)
+            if (combinedArea.bottom < window.innerHeight - padding) {
+                safeZones.push({
+                    minX: padding,
+                    maxX: window.innerWidth - buttonWidth - padding,
+                    minY: combinedArea.bottom + padding,
+                    maxY: window.innerHeight - buttonHeight - padding
+                });
+            }
+            
+            // Left zone (left of text)
+            if (combinedArea.left > padding) {
+                safeZones.push({
+                    minX: padding,
+                    maxX: combinedArea.left - buttonWidth,
+                    minY: Math.max(padding, combinedArea.top - padding),
+                    maxY: Math.min(window.innerHeight - buttonHeight - padding, combinedArea.bottom + padding)
+                });
+            }
+            
+            // Right zone (right of text)
+            if (combinedArea.right < window.innerWidth - padding) {
+                safeZones.push({
+                    minX: combinedArea.right + padding,
+                    maxX: window.innerWidth - buttonWidth - padding,
+                    minY: Math.max(padding, combinedArea.top - padding),
+                    maxY: Math.min(window.innerHeight - buttonHeight - padding, combinedArea.bottom + padding)
+                });
+            }
+            
+            // If no safe zones, use corners
+            if (safeZones.length === 0) {
+                safeZones.push({
+                    minX: padding,
+                    maxX: window.innerWidth - buttonWidth - padding,
+                    minY: padding,
+                    maxY: window.innerHeight - buttonHeight - padding
+                });
+            }
+            
+            // Pick a random safe zone
+            const zone = safeZones[Math.floor(Math.random() * safeZones.length)];
+            
+            // Ensure valid coordinates
+            const maxX = Math.max(zone.minX, zone.maxX - buttonWidth);
+            const maxY = Math.max(zone.minY, zone.maxY - buttonHeight);
             
             return {
-                x: Math.random() * (maxX - minX) + minX,
-                y: Math.random() * (maxY - minY) + minY
+                x: Math.random() * (maxX - zone.minX) + zone.minX,
+                y: Math.random() * (maxY - zone.minY) + zone.minY
             };
         }
         
