@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 20px;
+        }
+        
+        .message-container {
+            max-width: 800px;
+            padding: 60px 40px;
+        }
+        
+        .message {
+            font-size: 28px;
+            line-height: 1.8;
+            color: #2d3748;
+            text-align: center;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: #667eea;
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+            vertical-align: text-bottom;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .message-container {
+                padding: 40px 30px;
+            }
+            
+            .message {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const text = "You are my soulmate in every life, the only person I could ever consider to be my wife. You are the reason I try so hard at everything, you are the reason I smile everyday, and you are the reason I maintain my sanity. Will you be my Valentine's?";
+        
+        const messageEl = document.getElementById('message');
+        let index = 0;
+        const typingSpeed = 50; // milliseconds per character
+        
+        function typeWriter() {
+            if (index < text.length) {
+                messageEl.innerHTML = text.substring(0, index + 1) + '<span class="cursor"></span>';
+                index++;
+                setTimeout(typeWriter, typingSpeed);
+            } else {
+                // Keep cursor blinking after typing is complete
+                messageEl.innerHTML = text + '<span class="cursor"></span>';
+            }
+        }
+        
+        // Start typing after a brief delay
+        setTimeout(typeWriter, 500);
+    </script>
+</body>
+</html>
