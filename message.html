@@ -33,6 +33,14 @@
             text-align: center;
         }
         
+        .final-sentence {
+            font-size: 32px;
+            line-height: 1.8;
+            color: #2d3748;
+            text-align: center;
+            font-weight: 500;
+        }
+        
         .cursor {
             display: inline-block;
             width: 3px;
@@ -56,6 +64,10 @@
             .message {
                 font-size: 22px;
             }
+            
+            .final-sentence {
+                font-size: 26px;
+            }
         }
     </style>
 </head>
@@ -69,28 +81,46 @@
         
         const messageEl = document.getElementById('message');
         let index = 0;
-        const typingSpeed = 65; // milliseconds per character
+        const typingSpeed = 80; // milliseconds per character
+        const deleteSpeed = 30; // milliseconds per character for deletion
         const pauseBeforeFinal = text.indexOf("Will you be my Valentine's?");
+        const finalSentence = "Will you be my Valentine's?";
+        
+        function deleteText() {
+            if (index > 0) {
+                messageEl.innerHTML = text.substring(0, index - 1) + '<span class="cursor"></span>';
+                index--;
+                setTimeout(deleteText, deleteSpeed);
+            } else {
+                // All text deleted, wait 2.5 seconds then type final sentence
+                messageEl.innerHTML = '<span class="cursor"></span>';
+                messageEl.className = 'final-sentence';
+                setTimeout(() => {
+                    index = 0;
+                    typeFinalSentence();
+                }, 2500);
+            }
+        }
+        
+        function typeFinalSentence() {
+            if (index < finalSentence.length) {
+                messageEl.innerHTML = finalSentence.substring(0, index + 1) + '<span class="cursor"></span>';
+                index++;
+                setTimeout(typeFinalSentence, typingSpeed);
+            } else {
+                // Keep cursor blinking after typing is complete
+                messageEl.innerHTML = finalSentence + '<span class="cursor"></span>';
+            }
+        }
         
         function typeWriter() {
-            if (index < text.length) {
-                // Pause for 1 second right before the final sentence
-                if (index === pauseBeforeFinal) {
-                    messageEl.innerHTML = text.substring(0, index) + '<span class="cursor"></span>';
-                    setTimeout(() => {
-                        messageEl.innerHTML = text.substring(0, index + 2) + '<span class="cursor"></span>';
-                        index++;
-                        setTimeout(typeWriter, typingSpeed);
-                    }, 1000);
-                    return;
-                }
-                
+            if (index < pauseBeforeFinal) {
                 messageEl.innerHTML = text.substring(0, index + 1) + '<span class="cursor"></span>';
                 index++;
                 setTimeout(typeWriter, typingSpeed);
             } else {
-                // Keep cursor blinking after typing is complete
-                messageEl.innerHTML = text + '<span class="cursor"></span>';
+                // Reached the point before final sentence, start deleting
+                setTimeout(deleteText, 500);
             }
         }
         
