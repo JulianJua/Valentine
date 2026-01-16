@@ -228,11 +228,20 @@
         // Button interaction logic
         let noClickCount = 0;
         const maxMoves = 5; // Number of times to move the button
+        const minDistance = 200; // Minimum distance between moves (in pixels)
+        let previousPosition = null;
         const yesButton = document.getElementById('yesButton');
         const noButton = document.getElementById('noButton');
         const buttonsContainer = document.getElementById('buttonsContainer');
         const messageContainer = document.querySelector('.message-container');
         const thankYouEl = document.getElementById('thankYou');
+        
+        function getDistance(pos1, pos2) {
+            if (!pos1 || !pos2) return Infinity;
+            const dx = pos1.x - pos2.x;
+            const dy = pos1.y - pos2.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
         
         function getRandomPosition() {
             const buttonWidth = 150;
@@ -349,24 +358,35 @@
         }
         
         function moveNoButton() {
-            const pos = getRandomPosition();
+            let pos;
+            let attempts = 0;
+            const maxAttempts = 50; // Prevent infinite loop
+            
+            // Keep trying until we find a position far enough from the previous one
+            do {
+                pos = getRandomPosition();
+                attempts++;
+            } while (previousPosition && getDistance(pos, previousPosition) < minDistance && attempts < maxAttempts);
+            
+            // Update button position
             noButton.style.position = 'fixed';
             noButton.style.left = pos.x + 'px';
             noButton.style.top = pos.y + 'px';
             noButton.style.zIndex = '1000';
+            
+            // Store the new position
+            previousPosition = pos;
         }
         
         noButton.addEventListener('click', function() {
             noClickCount++;
             
-            // Move the button randomly immediately on first click
-            moveNoButton();
-            
             if (noClickCount === maxMoves) {
-                // After 5th move, remove the No button
-                setTimeout(() => {
-                    noButton.style.display = 'none';
-                }, 300);
+                // After 5th click, hide immediately
+                noButton.style.display = 'none';
+            } else {
+                // Move the button randomly immediately
+                moveNoButton();
             }
         });
         
