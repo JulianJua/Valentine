@@ -69,10 +69,22 @@
         
         const messageEl = document.getElementById('message');
         let index = 0;
-        const typingSpeed = 50; // milliseconds per character
+        const typingSpeed = 65; // milliseconds per character
+        const pauseBeforeFinal = text.indexOf("Will you be my Valentine's?");
         
         function typeWriter() {
             if (index < text.length) {
+                // Pause for 1 second right before the final sentence
+                if (index === pauseBeforeFinal) {
+                    messageEl.innerHTML = text.substring(0, index) + '<span class="cursor"></span>';
+                    setTimeout(() => {
+                        messageEl.innerHTML = text.substring(0, index + 1) + '<span class="cursor"></span>';
+                        index++;
+                        setTimeout(typeWriter, typingSpeed);
+                    }, 1000);
+                    return;
+                }
+                
                 messageEl.innerHTML = text.substring(0, index + 1) + '<span class="cursor"></span>';
                 index++;
                 setTimeout(typeWriter, typingSpeed);
