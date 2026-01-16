@@ -48,7 +48,7 @@
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-top: 40px;
+            margin-top: 25px;
             opacity: 0;
             transition: opacity 0.5s ease-in;
         }
@@ -189,8 +189,8 @@
                 index++;
                 setTimeout(typeFinalSentence, typingSpeed);
             } else {
-                // Keep cursor blinking after typing is complete
-                messageEl.innerHTML = finalSentence + '<span class="cursor"></span>';
+                // Remove cursor and show final sentence
+                messageEl.innerHTML = finalSentence;
                 // Show buttons after a brief delay
                 setTimeout(() => {
                     document.getElementById('buttonsContainer').classList.add('show');
