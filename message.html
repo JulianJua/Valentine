@@ -83,6 +83,8 @@
         .button.no-button {
             transition: none;
             -webkit-tap-highlight-color: transparent;
+            pointer-events: auto !important;
+            cursor: pointer;
         }
         
         .button.no-button:active {
@@ -99,6 +101,9 @@
         
         .button.yes-button {
             -webkit-tap-highlight-color: transparent;
+            pointer-events: auto !important;
+            cursor: pointer;
+            z-index: 10;
         }
         
         .button.yes-button:active {
@@ -809,7 +814,9 @@
             previousPosition = pos;
         }
         
-        noButton.addEventListener('click', function() {
+        noButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             noClickCount++;
             
             if (noClickCount === maxMoves) {
@@ -821,7 +828,21 @@
             }
         });
         
-        yesButton.addEventListener('click', function() {
+        // Add touchstart event for better mobile support
+        noButton.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            noClickCount++;
+            
+            if (noClickCount === maxMoves) {
+                noButton.style.display = 'none';
+            } else {
+                moveNoButton();
+            }
+        });
+        
+        yesButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             // Set the appropriate message based on whether No was clicked
             if (noClickCount === 0) {
                 // First time Yes - show the romantic message
