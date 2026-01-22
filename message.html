@@ -154,10 +154,12 @@
             margin-top: 30px;
             opacity: 0;
             transition: opacity 0.5s ease-in;
+            pointer-events: none;
         }
         
         .entry-input-container.show {
             opacity: 1;
+            pointer-events: auto;
         }
         
         .entry-input {
@@ -171,9 +173,15 @@
             text-align: center;
             width: 200px;
             max-width: 100%;
-            pointer-events: auto;
+            pointer-events: auto !important;
             -webkit-user-select: text;
             user-select: text;
+            z-index: 1000;
+            position: relative;
+        }
+        
+        .entry-input:disabled {
+            pointer-events: none;
         }
         
         .entry-input:focus {
@@ -487,7 +495,13 @@
                     // Ensure input is enabled and focusable
                     entryInput.disabled = false;
                     entryInput.readOnly = false;
-                    entryInput.focus();
+                    entryInput.removeAttribute('readonly');
+                    entryInput.removeAttribute('disabled');
+                    // Force focus after a small delay to ensure container is visible
+                    setTimeout(() => {
+                        entryInput.focus();
+                        entryInput.click();
+                    }, 100);
                 }, 500);
             }
         }
