@@ -135,6 +135,69 @@
             transition: opacity 0.5s ease-out;
         }
         
+        .entry-screen {
+            width: 100%;
+            max-width: 800px;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .entry-question {
+            font-size: 28px;
+            line-height: 1.8;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .entry-input-container {
+            margin-top: 30px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        
+        .entry-input-container.show {
+            opacity: 1;
+        }
+        
+        .entry-input {
+            padding: 15px 20px;
+            font-size: 24px;
+            font-family: 'Times New Roman', Times, serif;
+            border: 2px solid #2d3748;
+            background-color: #ffffff;
+            color: #2d3748;
+            border-radius: 8px;
+            text-align: center;
+            width: 200px;
+            max-width: 100%;
+        }
+        
+        .entry-input:focus {
+            outline: none;
+            border-color: #2d3748;
+        }
+        
+        .error-message {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #2d3748;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        .main-content.show {
+            display: block;
+        }
+        
         .cursor {
             display: inline-block;
             width: 3px;
@@ -172,20 +235,118 @@
                 font-size: 24px;
                 padding: 0 30px;
             }
+            
+            .entry-screen {
+                padding: 40px 30px;
+            }
+            
+            .entry-question {
+                font-size: 22px;
+            }
+            
+            .entry-input {
+                font-size: 20px;
+                width: 180px;
+            }
+            
+            .error-message {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="message-container">
-        <div class="message" id="message"></div>
-        <div class="buttons-container" id="buttonsContainer">
-            <button class="button yes-button" id="yesButton">Yes</button>
-            <button class="button no-button" id="noButton">No</button>
+    <!-- Entry Screen -->
+    <div class="entry-screen" id="entryScreen">
+        <div class="entry-question" id="entryQuestion"></div>
+        <div class="entry-input-container" id="entryInputContainer">
+            <input type="text" class="entry-input" id="entryInput" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="000">
+            <div class="error-message" id="errorMessage">Oops ! Try again, cutie!</div>
         </div>
     </div>
-    <div class="thank-you" id="thankYou">I almost just killed myself, thanks for choosing me!</div>
+    
+    <!-- Main Content (hidden initially) -->
+    <div class="main-content" id="mainContent">
+        <div class="message-container">
+            <div class="message" id="message"></div>
+            <div class="buttons-container" id="buttonsContainer">
+                <button class="button yes-button" id="yesButton">Yes</button>
+                <button class="button no-button" id="noButton">No</button>
+            </div>
+        </div>
+        <div class="thank-you" id="thankYou">I almost just killed myself, thanks for choosing me!</div>
+    </div>
 
     <script>
+        // Entry Screen Logic
+        const entryQuestion = "To continue, all you have to do is enter the 3 numbers.";
+        const entryQuestionEl = document.getElementById('entryQuestion');
+        const entryInputContainer = document.getElementById('entryInputContainer');
+        const entryInput = document.getElementById('entryInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const entryScreen = document.getElementById('entryScreen');
+        const mainContent = document.getElementById('mainContent');
+        const correctAnswer = "323";
+        
+        let entryIndex = 0;
+        const entryTypingSpeed = 80;
+        
+        function typeEntryQuestion() {
+            if (entryIndex < entryQuestion.length) {
+                entryQuestionEl.innerHTML = entryQuestion.substring(0, entryIndex + 1) + '<span class="cursor"></span>';
+                entryIndex++;
+                setTimeout(typeEntryQuestion, entryTypingSpeed);
+            } else {
+                // Remove cursor and show input box
+                entryQuestionEl.innerHTML = entryQuestion;
+                setTimeout(() => {
+                    entryInputContainer.classList.add('show');
+                    entryInput.focus();
+                }, 500);
+            }
+        }
+        
+        // Only allow numbers in input
+        entryInput.addEventListener('input', function(e) {
+            // Remove any non-numeric characters
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+        
+        // Handle form submission (Enter key or when 3 digits are entered)
+        entryInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || entryInput.value.length === 3) {
+                validateEntry();
+            }
+        });
+        
+        // Also validate when 3 digits are entered
+        entryInput.addEventListener('input', function() {
+            if (entryInput.value.length === 3) {
+                validateEntry();
+            }
+        });
+        
+        function validateEntry() {
+            if (entryInput.value === correctAnswer) {
+                // Correct answer - hide entry screen and show main content
+                entryScreen.style.display = 'none';
+                mainContent.classList.add('show');
+                // Start the main message animation
+                startMainMessage();
+            } else {
+                // Wrong answer - show error message
+                errorMessage.classList.add('show');
+                entryInput.value = '';
+                setTimeout(() => {
+                    entryInput.focus();
+                }, 100);
+            }
+        }
+        
+        // Start typing the entry question
+        setTimeout(typeEntryQuestion, 2000);
+        
+        // Main Message Logic
         const text = "You are my soulmate in every life, the only person I could ever consider to be my wife. You are the reason I try so hard at everything, you are the reason I smile everyday, and you are the reason I maintain my sanity. Will you be my Valentine's?";
         
         const messageEl = document.getElementById('message');
@@ -194,6 +355,12 @@
         const deleteSpeed = 20; // milliseconds per character for deletion
         const pauseBeforeFinal = text.indexOf("Will you be my Valentine's?");
         const finalSentence = "Will you be my Valentine's?";
+        
+        function startMainMessage() {
+            // Reset index and start typing
+            index = 0;
+            setTimeout(typeWriter, 2000);
+        }
         
         function deleteText() {
             if (index > 0) {
@@ -237,8 +404,7 @@
             }
         }
         
-        // Start typing after a suspenseful delay
-        setTimeout(typeWriter, 2000);
+        // Main message will start after entry is validated
         
         // Button interaction logic
         let noClickCount = 0;
