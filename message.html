@@ -198,6 +198,109 @@
             display: block;
         }
         
+        .sunflower-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 60px 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        
+        .sunflower-container.show {
+            opacity: 1;
+        }
+        
+        .sunflower {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+        
+        .sunflower svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .petal-group {
+            animation: petalSway 4s ease-in-out infinite;
+            transform-origin: 150px 100px;
+        }
+        
+        .petal-group-outer {
+            animation: petalSway 4s ease-in-out infinite;
+            transform-origin: 150px 100px;
+        }
+        
+        .petal-group-inner {
+            animation: petalSway 4.5s ease-in-out infinite;
+            transform-origin: 150px 110px;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes petalSway {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            25% {
+                transform: rotate(-1.5deg) scale(1.01);
+            }
+            75% {
+                transform: rotate(1.5deg) scale(1.01);
+            }
+        }
+        
+        .center {
+            animation: pulse 2s ease-in-out infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .stem {
+            animation: stemSway 3s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        
+        @keyframes stemSway {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(1deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sunflower {
+                width: 250px;
+                height: 350px;
+            }
+            
+            .sunflower-container {
+                padding: 40px 20px;
+            }
+        }
+        
         .cursor {
             display: inline-block;
             width: 3px;
@@ -275,6 +378,70 @@
             </div>
         </div>
         <div class="thank-you" id="thankYou">I almost just killed myself, thanks for choosing me!</div>
+    </div>
+    
+    <!-- Sunflower Animation -->
+    <div class="sunflower-container" id="sunflowerContainer">
+        <div class="sunflower">
+            <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Stem -->
+                <path class="stem" d="M 150 250 Q 145 300 140 350 Q 150 350 150 400" 
+                      stroke="#2d5016" stroke-width="8" fill="none" stroke-linecap="round"/>
+                <path class="stem" d="M 150 250 Q 155 300 160 350 Q 150 350 150 400" 
+                      stroke="#2d5016" stroke-width="8" fill="none" stroke-linecap="round"/>
+                
+                <!-- Leaves -->
+                <ellipse cx="120" cy="320" rx="25" ry="15" fill="#3d6b1f" transform="rotate(-30 120 320)"/>
+                <ellipse cx="180" cy="330" rx="25" ry="15" fill="#3d6b1f" transform="rotate(30 180 330)"/>
+                
+                <!-- Petals - Outer layer -->
+                <g class="petal-group-outer">
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffd700" transform="rotate(0 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffed4e" transform="rotate(30 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffd700" transform="rotate(60 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffed4e" transform="rotate(90 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffd700" transform="rotate(120 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffed4e" transform="rotate(150 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffd700" transform="rotate(180 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffed4e" transform="rotate(210 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffd700" transform="rotate(240 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffed4e" transform="rotate(270 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffd700" transform="rotate(300 150 100)"/>
+                    <ellipse cx="150" cy="100" rx="22" ry="55" fill="#ffed4e" transform="rotate(330 150 100)"/>
+                </g>
+                
+                <!-- Petals - Inner layer -->
+                <g class="petal-group-inner">
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffed4e" transform="rotate(15 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(45 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffed4e" transform="rotate(75 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(105 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffed4e" transform="rotate(135 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(165 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffed4e" transform="rotate(195 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(225 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffed4e" transform="rotate(255 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(285 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffed4e" transform="rotate(315 150 110)"/>
+                    <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(345 150 110)"/>
+                </g>
+                
+                <!-- Center of sunflower -->
+                <circle class="center" cx="150" cy="110" r="35" fill="#8b4513"/>
+                <circle class="center" cx="150" cy="110" r="30" fill="#a0522d"/>
+                
+                <!-- Seeds pattern in center -->
+                <circle cx="145" cy="105" r="2" fill="#654321"/>
+                <circle cx="155" cy="105" r="2" fill="#654321"/>
+                <circle cx="150" cy="110" r="2" fill="#654321"/>
+                <circle cx="145" cy="115" r="2" fill="#654321"/>
+                <circle cx="155" cy="115" r="2" fill="#654321"/>
+                <circle cx="148" cy="108" r="1.5" fill="#654321"/>
+                <circle cx="152" cy="108" r="1.5" fill="#654321"/>
+                <circle cx="148" cy="112" r="1.5" fill="#654321"/>
+                <circle cx="152" cy="112" r="1.5" fill="#654321"/>
+            </svg>
+        </div>
     </div>
 
     <script>
@@ -603,6 +770,19 @@
                 messageContainer.style.display = 'none';
                 buttonsContainer.style.display = 'none';
                 thankYouEl.classList.add('show');
+                
+                // After showing the message, wait a bit then fade it out and show sunflower
+                setTimeout(() => {
+                    thankYouEl.classList.remove('show');
+                    thankYouEl.classList.add('fade-out');
+                    
+                    // Show sunflower after message fades
+                    setTimeout(() => {
+                        thankYouEl.style.display = 'none';
+                        const sunflowerContainer = document.getElementById('sunflowerContainer');
+                        sunflowerContainer.classList.add('show');
+                    }, 500);
+                }, 3000); // Show message for 3 seconds before transitioning to flower
             }, 1600);
         });
     </script>
