@@ -184,13 +184,6 @@
         </div>
     </div>
     <div class="thank-you" id="thankYou">I almost just killed myself, thanks for choosing me!</div>
-    
-    <!-- Background Music -->
-    <audio id="backgroundMusic" loop>
-        <source src="background-music.mp3" type="audio/mpeg">
-        <source src="background-music.ogg" type="audio/ogg">
-        Your browser does not support the audio element.
-    </audio>
 
     <script>
         const text = "You are my soulmate in every life, the only person I could ever consider to be my wife. You are the reason I try so hard at everything, you are the reason I smile everyday, and you are the reason I maintain my sanity. Will you be my Valentine's?";
@@ -246,24 +239,6 @@
         
         // Start typing after a suspenseful delay
         setTimeout(typeWriter, 2000);
-        
-        // Start background music
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        backgroundMusic.volume = 0.3; // Set volume to 30% (adjust between 0.0 and 1.0)
-        
-        // Try to play music (may require user interaction on some browsers)
-        backgroundMusic.play().catch(function(error) {
-            // Autoplay was prevented - music will start on first user interaction
-            console.log('Autoplay prevented. Music will start on user interaction.');
-        });
-        
-        // Start music on first user interaction if autoplay was blocked
-        document.addEventListener('click', function startMusic() {
-            backgroundMusic.play().catch(function(error) {
-                console.log('Could not start music:', error);
-            });
-            document.removeEventListener('click', startMusic);
-        }, { once: true });
         
         // Button interaction logic
         let noClickCount = 0;
