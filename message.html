@@ -192,10 +192,14 @@
         
         .main-content {
             display: none;
+            width: 100%;
         }
         
         .main-content.show {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .sunflower-container {
@@ -384,15 +388,15 @@
     <div class="sunflower-container" id="sunflowerContainer">
         <div class="sunflower">
             <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
-                <!-- Stem -->
-                <path class="stem" d="M 150 250 Q 145 300 140 350 Q 150 350 150 400" 
-                      stroke="#2d5016" stroke-width="8" fill="none" stroke-linecap="round"/>
-                <path class="stem" d="M 150 250 Q 155 300 160 350 Q 150 350 150 400" 
-                      stroke="#2d5016" stroke-width="8" fill="none" stroke-linecap="round"/>
+                <!-- Stem - properly connected to flower center at y=110 -->
+                <path class="stem" d="M 150 110 Q 148 150 145 200 Q 145 250 140 300 Q 150 350 150 400" 
+                      stroke="#2d5016" stroke-width="12" fill="none" stroke-linecap="round"/>
+                <path class="stem" d="M 150 110 Q 152 150 155 200 Q 155 250 160 300 Q 150 350 150 400" 
+                      stroke="#2d5016" stroke-width="12" fill="none" stroke-linecap="round"/>
                 
                 <!-- Leaves -->
-                <ellipse cx="120" cy="320" rx="25" ry="15" fill="#3d6b1f" transform="rotate(-30 120 320)"/>
-                <ellipse cx="180" cy="330" rx="25" ry="15" fill="#3d6b1f" transform="rotate(30 180 330)"/>
+                <ellipse cx="120" cy="280" rx="30" ry="18" fill="#3d6b1f" transform="rotate(-25 120 280)"/>
+                <ellipse cx="180" cy="290" rx="30" ry="18" fill="#3d6b1f" transform="rotate(25 180 290)"/>
                 
                 <!-- Petals - Outer layer -->
                 <g class="petal-group-outer">
@@ -426,9 +430,12 @@
                     <ellipse cx="150" cy="110" rx="18" ry="45" fill="#ffd700" transform="rotate(345 150 110)"/>
                 </g>
                 
+                <!-- Connection point between flower and stem (drawn first, behind center) -->
+                <ellipse cx="150" cy="110" rx="42" ry="8" fill="#2d5016" opacity="0.9"/>
+                
                 <!-- Center of sunflower -->
-                <circle class="center" cx="150" cy="110" r="35" fill="#8b4513"/>
-                <circle class="center" cx="150" cy="110" r="30" fill="#a0522d"/>
+                <circle class="center" cx="150" cy="110" r="38" fill="#8b4513"/>
+                <circle class="center" cx="150" cy="110" r="32" fill="#a0522d"/>
                 
                 <!-- Seeds pattern in center -->
                 <circle cx="145" cy="105" r="2" fill="#654321"/>
