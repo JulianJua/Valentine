@@ -171,6 +171,9 @@
             text-align: center;
             width: 200px;
             max-width: 100%;
+            pointer-events: auto;
+            -webkit-user-select: text;
+            user-select: text;
         }
         
         .entry-input:focus {
@@ -481,6 +484,9 @@
                 entryQuestionEl.innerHTML = entryQuestion;
                 setTimeout(() => {
                     entryInputContainer.classList.add('show');
+                    // Ensure input is enabled and focusable
+                    entryInput.disabled = false;
+                    entryInput.readOnly = false;
                     entryInput.focus();
                 }, 500);
             }
@@ -489,19 +495,21 @@
         // Only allow numbers in input
         entryInput.addEventListener('input', function(e) {
             // Remove any non-numeric characters
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        });
-        
-        // Handle form submission (Enter key or when 3 digits are entered)
-        entryInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || entryInput.value.length === 3) {
+            const oldValue = e.target.value;
+            const newValue = oldValue.replace(/[^0-9]/g, '');
+            if (oldValue !== newValue) {
+                e.target.value = newValue;
+            }
+            
+            // Validate when 3 digits are entered
+            if (newValue.length === 3) {
                 validateEntry();
             }
         });
         
-        // Also validate when 3 digits are entered
-        entryInput.addEventListener('input', function() {
-            if (entryInput.value.length === 3) {
+        // Handle form submission (Enter key)
+        entryInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
                 validateEntry();
             }
         });
